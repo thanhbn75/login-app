@@ -1,65 +1,249 @@
-<!--
-Họ tên: Nguyễn Văn A
-Mã sinh viên: 20201234
-Lớp: D18CNPM2
--->
+# Họ tên: Vũ Minh Thành
 
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Mã sinh viên: 23810310236
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# Lớp: D18CNPM2
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+# 📌 Giới thiệu
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Dự án xây dựng chức năng đăng nhập bằng tài khoản bên thứ ba (Google và Facebook) sử dụng Laravel và Socialite (OAuth 2.0).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+# ⚙️ 1. Cách cài đặt
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## 🔧 Yêu cầu hệ thống
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+* PHP >= 8.x
+* Composer
+* MySQL (XAMPP)
+* Node.js (nếu dùng frontend nâng cao)
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## 🚀 Cài đặt project
 
-### Premium Partners
+### Bước 1: Clone project
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+```bash
+git clone <link-github>
+cd login-app
+```
 
-## Contributing
+### Bước 2: Cài thư viện
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+composer install
+```
 
-## Code of Conduct
+### Bước 3: Tạo file môi trường
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+cp .env.example .env
+```
 
-## Security Vulnerabilities
+### Bước 4: Cấu hình database
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Mở file `.env`:
 
-## License
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=social_login
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Tạo database:
+
+```sql
+CREATE DATABASE social_login;
+```
+
+---
+
+### Bước 5: Generate key
+
+```bash
+php artisan key:generate
+```
+
+---
+
+### Bước 6: Chạy migration
+
+```bash
+php artisan migrate
+```
+
+---
+
+### Bước 7: Chạy project
+
+```bash
+php artisan serve
+```
+
+Truy cập:
+
+```
+http://127.0.0.1:8000
+```
+
+---
+
+# 🔐 2. Cấu hình Google OAuth
+
+## Bước 1: Tạo ứng dụng Google
+
+* Truy cập: https://console.cloud.google.com
+* Tạo Project
+* Vào **OAuth Consent Screen** → cấu hình
+* Vào **Credentials** → Create OAuth Client ID
+
+---
+
+## Bước 2: Cấu hình Redirect URI
+
+```
+http://127.0.0.1:8000/auth/google/callback
+```
+
+---
+
+## Bước 3: Lấy thông tin
+
+* Client ID
+* Client Secret
+
+---
+
+## Bước 4: Cập nhật `.env`
+
+```env
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+GOOGLE_REDIRECT_URI=http://127.0.0.1:8000/auth/google/callback
+```
+
+---
+
+# 📘 3. Cấu hình Facebook OAuth
+
+## 🔐 Cấu hình Facebook OAuth với ngrok (HTTPS)
+
+Do Facebook yêu cầu HTTPS khi đăng nhập OAuth, cần sử dụng ngrok để tạo URL bảo mật.
+
+### Bước 1: Cài đặt ngrok
+
+Tải tại: https://ngrok.com/download
+
+### Bước 2: Kết nối tài khoản
+
+```bash
+ngrok config add-authtoken YOUR_TOKEN
+```
+
+### Bước 3: Chạy Laravel
+
+```bash
+php artisan serve
+```
+
+### Bước 4: Chạy ngrok
+
+```bash
+ngrok http 8000
+```
+
+### Bước 5: Lấy URL HTTPS
+
+Ví dụ:
+
+```
+https://abc123.ngrok-free.app
+```
+
+### Bước 6: Cấu hình Facebook
+
+Trong Facebook Developer → Facebook Login → Settings:
+
+```
+https://abc123.ngrok-free.app/auth/facebook/callback
+```
+
+### Bước 7: Cập nhật .env
+
+```env
+FACEBOOK_REDIRECT_URI=https://abc123.ngrok-free.app/auth/facebook/callback
+```
+
+### Lưu ý:
+
+* URL ngrok sẽ thay đổi mỗi lần chạy
+* Cần cập nhật lại khi restart ngrok
+
+
+# ⚙️ 4. Cấu hình Laravel Socialite
+
+Mở file `config/services.php`:
+
+```php
+return [
+
+    'google' => [
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirect' => env('GOOGLE_REDIRECT_URI'),
+    ],
+
+    'facebook' => [
+        'client_id' => env('FACEBOOK_CLIENT_ID'),
+        'client_secret' => env('FACEBOOK_CLIENT_SECRET'),
+        'redirect' => env('FACEBOOK_REDIRECT_URI'),
+    ],
+
+];
+```
+
+---
+
+# 👤 5. Chức năng chính
+
+* Đăng nhập bằng Google
+* Đăng nhập bằng Facebook
+* Lưu thông tin người dùng (name, email, avatar)
+* Nếu user tồn tại → đăng nhập
+* Nếu chưa → tạo mới
+* Hiển thị thông tin người dùng
+* Đăng xuất (logout)
+* Xử lý lỗi đăng nhập
+
+---
+
+# ⚠️ 6. Lưu ý
+
+* Không commit file `.env` lên GitHub
+* Phải chạy:
+
+```bash
+php artisan config:clear
+```
+
+sau khi sửa `.env`
+
+* Nếu lỗi OAuth:
+
+  * Kiểm tra đúng Redirect URI
+  * Kiểm tra App đã bật public (Facebook)
+
+---
+
+# ✅ 7. Kết luận
+
+Dự án đã triển khai thành công chức năng đăng nhập bằng Google và Facebook sử dụng OAuth 2.0 với Laravel Socialite, đáp ứng đầy đủ yêu cầu đề bài.
+
+---
